@@ -2,11 +2,14 @@
 A Controller for a Four Wire Brushless DC Fan
 
 The fan under test was a GDSTIME model 1238 120mm 12V PWM Fan, 120mm x 38mm 213CFM DC Brushless Cooling Fan
+The signals on the four wires are:
+> Connector: 4-PIN; Lead wire: UL Type (+): Red Wire ; (-): Black Wire. FG function：Yellow Wire. PWM: Blue Wire. 
 
 Circuit Description:
+Arduino UNO.
 A 10K pot with wiper to A0,
 A 300 OHm resistor from D9 out to the PWM in on the fan.
-A 10K pull up on the FG (Frequency Generator) pin of the fan.
+A 10K pull up on the FG (Frequency Generator) pin of the fan.  The FG to D2 pin for measuring fan speed.
 
 Screen capture of PWM and FG signals.
 ![CH1_PWM_CH2_FG.png](CH1_PWM_CH2_FG.png)
@@ -29,7 +32,7 @@ Used PN2222 with emitter ground. Use 10K resistor from D9 into the base. Collect
 This inverts the sense of the PWM so the code should be changed to invert the sense of the speed control.  
 
 Screen capture of PWM Inverter and FG signals.
-![CH1_PWM_Inverter_CH2_FG.png](CH1_PWM_Inverter_CH2_FG.png)
+![CH1_PWM_Inverter_CH2_FG.png](CH1_PWM_Inverter_CH2_FG.png)  
 Note how the logic high voltage of this PWM is about 3V.
 
 
