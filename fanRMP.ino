@@ -21,6 +21,23 @@ unsigned long calcRPM() {
   } else return 0;
 }
 
+//For reportRPM
+// Print out the RPM at a regular interval.
+unsigned long lastPrintRPMtime = 0;
+unsigned long nextRPMchange = 100; //time in ms.
+
+void reportRPM(void) {
+  long currentMillis = 0;
+  currentMillis = millis();
+  if (((currentMillis - lastPrintRPMtime) > nextRPMchange) || (currentMillis < lastPrintRPMtime)) {
+    lastPrintRPMtime = currentMillis; 
+    Serial.print("RPM:");
+    Serial.print(calcRPM());
+    Serial.print(", ");
+    Serial.println(analogRead(A0));
+  }
+}//end reportRPM
+
 //For Wink
 //Set LED for Uno or ESP32 Dev Kit on board blue LED.
 //const int LED_BUILTIN = 2;    // ESP32 Kit
@@ -31,7 +48,7 @@ unsigned long lastLEDtime = 0;
 unsigned long nextLEDchange = 100; //time in ms.
 
 //Wink the LED
-void wink() {
+void wink(void) {
   if (((millis() - lastLEDtime) > nextLEDchange) || (millis() < lastLEDtime)) {
     if (digitalRead(LED_BUILTIN) == LOW) {
       digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
@@ -55,16 +72,13 @@ void setup() {
   Serial.begin(115200); //enable serial so we can see the RPM in the serial monitor
   delay(100);
   Serial.println("****** fanRMP.ino ******");
-  Serial.println("Version: 0.2");
+  Serial.println("Version: 0.3");
   digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
 }//end setup()
 
+//Multi taksing using methods similar to 
+//https://learn.adafruit.com/multi-tasking-the-arduino-part-1/a-classy-solution
 void loop() {
-  delay(100);
-  Serial.print("RPM:");
-  Serial.print(calcRPM());
-  Serial.print(", ");
-  Serial.println(analogRead(A0));
-
+  reportRPM();
   wink();
 }// end loop()
