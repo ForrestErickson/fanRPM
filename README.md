@@ -23,5 +23,14 @@ My fan speed was limited by the 1Ammp current limit of my 12V supply.  I got max
 Program serial monitor output when adjusting for maximum fan RPM.
 ![image](https://github.com/ForrestErickson/fanRPM/assets/5836181/a9d557da-bb3a-45a3-9584-eb1630191ea1)
 
+## 3.3 Volt Compatibility Testing
+Experiment with a solution for buffering the GPIO pin through an NPN inverting switch into the PWM.
+Used PN2222 with emitter ground. Use 10K resistor from D9 into the base. Collector to the PWM through 300 Ohms.
+This inverts the sense of the PWM so the code should be changed to invert the sense of the speed control.  
+
+Screen capture of PWM Inverter and FG signals.
+![CH1_PWM_Inverter_CH2_FG.png](CH1_PWM_Inverter_CH2_FG.png)
+Note how the logic high voltage of this PWM is about 3V.
+
 
 
