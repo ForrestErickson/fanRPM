@@ -1,6 +1,11 @@
 //fanRMP.ino
 // From: https://fdossena.com/?p=ArduinoFanControl/i.md
 
+
+#define PROG_NAME "**** fanRPM ****"
+#define VERSION "Rev: 0.4"
+#define BAUDRATE 115200
+
 //RPM sense
 #define PIN_SENSE 2 //where we connected the fan sense pin. Must be an interrupt capable pin (2 or 3 on Arduino Uno)
 #define DEBOUNCE 0 //0 is fine for most fans, crappy fans may require 10 or 20 to filter out noise
@@ -71,8 +76,10 @@ void setup() {
 
   Serial.begin(115200); //enable serial so we can see the RPM in the serial monitor
   delay(100);
-  Serial.println("****** fanRMP.ino ******");
-  Serial.println("Version: 0.3");
+//Print program and version is incompatible with setting the plot legend
+  Serial.println(F(PROG_NAME));
+  Serial.println(F(VERSION));
+
   digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
 }//end setup()
 
