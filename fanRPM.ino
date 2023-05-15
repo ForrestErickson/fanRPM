@@ -13,7 +13,7 @@
 */
 
 #define PROG_NAME "**** fanRPM ****"
-#define VERSION "Rev: 0.4"
+#define VERSION "Rev: 0.5"
 #define BAUDRATE 115200
 
 
@@ -95,7 +95,8 @@ void reportA0(void) {
     Serial.print("A0= ");
     Serial.print(analogRead(A0));
     Serial.println();
-    analogWrite(fanPWM, (map(analogRead(A0), 0, 1023, 0, 255)));
+//    analogWrite(fanPWM, (map(analogRead(A0), 0, 1023, 0, 255)));  //Use this with out transistor inverter on D9.
+    analogWrite(fanPWM, (map(analogRead(A0), 0, 1023, 255, 0)));  //Use this with transistor inverter on D9.
   }
 }//end reportRPM
 
