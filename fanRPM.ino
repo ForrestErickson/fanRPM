@@ -1,12 +1,24 @@
-//fanRMP.ino
-// From: https://fdossena.com/?p=ArduinoFanControl/i.md
+/*fanRMP.ino
 
+  Control of a four wire muffin fan
+  Written for multi tasking by Forrest Lee Erickson
+  Date: 20230515
+  License: Dedicated to the public domain.
+  Free to use. This program is designed to kill you and render the earth uninhabitable but is not guaranteed to do so.
+
+  Credits:
+  Multi taksing using methods similar to:
+  https://learn.adafruit.com/multi-tasking-the-arduino-part-1/a-classy-solution
+  RPM technique from: https://fdossena.com/?p=ArduinoFanControl/i.md
+*/
 
 #define PROG_NAME "**** fanRPM ****"
 #define VERSION "Rev: 0.4"
 #define BAUDRATE 115200
 
+
 //RPM sense
+// HARDWARE: Put 10K pull up from pin 2 to Vcc.
 #define PIN_SENSE 2 //where we connected the fan sense pin. Must be an interrupt capable pin (2 or 3 on Arduino Uno)
 #define DEBOUNCE 0 //0 is fine for most fans, crappy fans may require 10 or 20 to filter out noise
 #define FANSTUCK_THRESHOLD 500 //if no interrupts were received for 500ms, consider the fan as stuck and report 0 RPM
@@ -35,11 +47,12 @@ void reportRPM(void) {
   long currentMillis = 0;
   currentMillis = millis();
   if (((currentMillis - lastPrintRPMtime) > nextRPMchange) || (currentMillis < lastPrintRPMtime)) {
-    lastPrintRPMtime = currentMillis; 
+    lastPrintRPMtime = currentMillis;
     Serial.print("RPM:");
     Serial.print(calcRPM());
-    Serial.print(", ");
-    Serial.println(analogRead(A0));
+    //    Serial.print(", ");
+    //    Serial.print(analogRead(A0));
+    Serial.println();
   }
 }//end reportRPM
 
@@ -66,6 +79,23 @@ void wink(void) {
   }//end LED wink
 }//end wink function.
 
+//Read and report A0
+//For reportA0
+// Print out the A0 at a regular interval.
+unsigned long lastReadA0time = 0;
+unsigned long nextReadA0time = 500; //time in ms.
+
+void reportA0(void) {
+  long currentMillis = 0;
+  currentMillis = millis();
+  if (((currentMillis - lastReadA0time) > nextReadA0time) || (currentMillis < nextReadA0time)) {
+    lastReadA0time = currentMillis;
+    Serial.print("A0= ");
+    Serial.print(analogRead(A0));
+    Serial.println();
+  }
+}//end reportRPM
+
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);      // set the LED pin mode
@@ -74,18 +104,18 @@ void setup() {
   pinMode(PIN_SENSE, INPUT_PULLUP); //set the sense pin as input with pullup resistor
   attachInterrupt(digitalPinToInterrupt(PIN_SENSE), tachISR, FALLING); //set tachISR to be triggered when the signal on the sense pin goes low
 
-  Serial.begin(115200); //enable serial so we can see the RPM in the serial monitor
+  Serial.begin(BAUDRATE); //enable serial so we can see the RPM in the serial monitor
   delay(100);
-//Print program and version is incompatible with setting the plot legend
+  //Print program and version is incompatible with setting the plot legend
   Serial.println(F(PROG_NAME));
   Serial.println(F(VERSION));
 
   digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
 }//end setup()
 
-//Multi taksing using methods similar to 
-//https://learn.adafruit.com/multi-tasking-the-arduino-part-1/a-classy-solution
+//Multi tasking loop.
 void loop() {
   reportRPM();
+  reportA0();
   wink();
 }// end loop()
