@@ -83,9 +83,11 @@ void wink(void) {
 //For reportA0
 // Print out the A0 at a regular interval.
 unsigned long lastReadA0time = 0;
-unsigned long nextReadA0time = 500; //time in ms.
+unsigned long nextReadA0time = 100; //time in ms.
 
 void reportA0(void) {
+  //Make PWM on Pin 9 for speed control of fan.
+  int fanPWM = 9;
   long currentMillis = 0;
   currentMillis = millis();
   if (((currentMillis - lastReadA0time) > nextReadA0time) || (currentMillis < nextReadA0time)) {
@@ -93,6 +95,7 @@ void reportA0(void) {
     Serial.print("A0= ");
     Serial.print(analogRead(A0));
     Serial.println();
+    analogWrite(fanPWM, (map(analogRead(A0), 0, 1023, 0, 255)));
   }
 }//end reportRPM
 
