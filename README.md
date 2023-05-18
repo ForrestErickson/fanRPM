@@ -1,6 +1,8 @@
 # fanRPM
 A Controller for a Four Wire Brushless DC Fan
 
+**Note: the Tag for Version 0.6 is a change to only print RPM. Used for fan obstruction testing with the Arduino Serial Ploter.**
+
 The fan under test was a GDSTIME model 1238 120mm 12V PWM Fan, 120mm x 38mm 213CFM DC Brushless Cooling Fan
 The signals on the four wires are:
 > Connector: 4-PIN; Lead wire: UL Type (+): Red Wire ; (-): Black Wire. FG function：Yellow Wire. PWM: Blue Wire. 
