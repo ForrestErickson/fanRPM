@@ -13,9 +13,10 @@
 */
 
 #define PROG_NAME "**** fanRPM ****"
-#define VERSION "Rev: 0.5"
+#define VERSION "Rev: 0.6"
 #define BAUDRATE 115200
 
+#define PLOTTING true
 
 //RPM sense
 // HARDWARE: Put 10K pull up from pin 2 to Vcc.
@@ -48,11 +49,13 @@ void reportRPM(void) {
   currentMillis = millis();
   if (((currentMillis - lastPrintRPMtime) > nextRPMchange) || (currentMillis < lastPrintRPMtime)) {
     lastPrintRPMtime = currentMillis;
+
+#ifndef PLOTTING
     Serial.print("RPM:");
+#endif
     Serial.print(calcRPM());
-    //    Serial.print(", ");
-    //    Serial.print(analogRead(A0));
-    Serial.println();
+    Serial.print(", ");
+//    Serial.println();
   }
 }//end reportRPM
 
@@ -92,10 +95,19 @@ void reportA0(void) {
   currentMillis = millis();
   if (((currentMillis - lastReadA0time) > nextReadA0time) || (currentMillis < nextReadA0time)) {
     lastReadA0time = currentMillis;
-    Serial.print("A0= ");
-    Serial.print(analogRead(A0));
+//    
+//#ifndef PLOTTING
+//    Serial.print("A0= ");
+//#endif
+//    Serial.print(analogRead(A0));
+//    Serial.print(", ");
+//#ifndef PLOTTING
+//    Serial.print("A1= ");
+//#endif
+//    Serial.print(analogRead(A1));
+    
     Serial.println();
-//    analogWrite(fanPWM, (map(analogRead(A0), 0, 1023, 0, 255)));  //Use this with out transistor inverter on D9.
+    //    analogWrite(fanPWM, (map(analogRead(A0), 0, 1023, 0, 255)));  //Use this with out transistor inverter on D9.
     analogWrite(fanPWM, (map(analogRead(A0), 0, 1023, 255, 0)));  //Use this with transistor inverter on D9.
   }
 }//end reportRPM
@@ -110,10 +122,19 @@ void setup() {
 
   Serial.begin(BAUDRATE); //enable serial so we can see the RPM in the serial monitor
   delay(100);
+
+#ifdef PLOTTING
+  Serial.print("RPM,");
+//  Serial.print("A0, ");
+//  Serial.print(" A1 ");
+  Serial.println();
+#endif
+
   //Print program and version is incompatible with setting the plot legend
+#ifndef PLOTTING
   Serial.println(F(PROG_NAME));
   Serial.println(F(VERSION));
-
+#endif
   digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
 }//end setup()
 
