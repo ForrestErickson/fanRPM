@@ -1,5 +1,7 @@
 # fanRPM
 A Controller for a Four Wire Brushless DC Fan
+Control a fan with a potentiometer wiper into A0
+Reports fan RPM by the method of measuring the period of the fan tachometer and computing a period.  This method becomes course at high RPM.
 
 **Note: the Tag for Version 0.6 is a change to only print RPM. Used for fan obstruction testing with the Arduino Serial Ploter.**
 
